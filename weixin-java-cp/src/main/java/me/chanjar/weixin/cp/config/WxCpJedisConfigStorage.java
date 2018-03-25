@@ -9,18 +9,26 @@ import redis.clients.jedis.JedisPoolConfig;
 import java.io.File;
 
 /**
- * Jedis client implementor for wechat config storage
+ * Jedis client implementor for wechat config storage.
+ * <pre>
+ *    使用说明：本实现仅供参考，并不完整，
+ *    比如为减少项目依赖，未加入redis分布式锁的实现，如有需要请自行实现。
+ * </pre>
  *
  * @author gaigeshen
  */
 public class WxCpJedisConfigStorage implements WxCpConfigStorage {
 
-  /* Redis keys here */
+  /**
+   * Redis keys here
+   */
   private static final String ACCESS_TOKEN_KEY = "WX_CP_ACCESS_TOKEN";
   private static final String ACCESS_TOKEN_EXPIRES_TIME_KEY = "WX_CP_ACCESS_TOKEN_EXPIRES_TIME";
   private static final String JS_API_TICKET_KEY = "WX_CP_JS_API_TICKET";
   private static final String JS_API_TICKET_EXPIRES_TIME_KEY = "WX_CP_JS_API_TICKET_EXPIRES_TIME";
-  /* Redis clients pool */
+  /**
+   * Redis clients pool
+   */
   private final JedisPool jedisPool;
   private volatile String corpId;
   private volatile String corpSecret;
@@ -192,8 +200,7 @@ public class WxCpJedisConfigStorage implements WxCpConfigStorage {
       String expiresTimeStr = jedis.get(ACCESS_TOKEN_EXPIRES_TIME_KEY);
 
       if (expiresTimeStr != null) {
-        Long expiresTime = Long.parseLong(expiresTimeStr);
-        return expiresTime;
+        return Long.parseLong(expiresTimeStr);
       }
 
       return 0L;

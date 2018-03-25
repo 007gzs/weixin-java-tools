@@ -38,6 +38,7 @@ public class WxMaServiceImpl implements WxMaService, RequestHttp<CloseableHttpCl
   private WxMaMediaService materialService = new WxMaMediaServiceImpl(this);
   private WxMaUserService userService = new WxMaUserServiceImpl(this);
   private WxMaQrcodeService qrCodeService = new WxMaQrcodeServiceImpl(this);
+  private WxMaTemplateService templateService = new WxMaTemplateServiceImpl(this);
 
   private int retrySleepMillis = 1000;
   private int maxRetryTimes = 5;
@@ -181,7 +182,7 @@ public class WxMaServiceImpl implements WxMaService, RequestHttp<CloseableHttpCl
     throw new RuntimeException("微信服务端异常，超出重试次数");
   }
 
-  public synchronized <T, E> T executeInternal(RequestExecutor<T, E> executor, String uri, E data) throws WxErrorException {
+  public <T, E> T executeInternal(RequestExecutor<T, E> executor, String uri, E data) throws WxErrorException {
     if (uri.contains("access_token=")) {
       throw new IllegalArgumentException("uri参数中不允许有access_token: " + uri);
     }
@@ -258,5 +259,10 @@ public class WxMaServiceImpl implements WxMaService, RequestHttp<CloseableHttpCl
   @Override
   public WxMaQrcodeService getQrcodeService() {
     return this.qrCodeService;
+  }
+
+  @Override
+  public WxMaTemplateService getTemplateService() {
+    return this.templateService;
   }
 }
