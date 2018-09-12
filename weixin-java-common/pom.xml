@@ -7,12 +7,12 @@
   <parent>
     <groupId>com.github.binarywang</groupId>
     <artifactId>weixin-java-parent</artifactId>
-    <version>3.1.0</version>
+    <version>3.1.8.B</version>
   </parent>
 
   <artifactId>weixin-java-common</artifactId>
   <name>Weixin Java Tools - Common</name>
-  <description>微信公众号、企业号Java SDK Common</description>
+  <description>微信开发Java SDK公共模块</description>
 
   <dependencies>
     <dependency>

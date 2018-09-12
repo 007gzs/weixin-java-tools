@@ -1,5 +1,7 @@
 package me.chanjar.weixin.open.api;
 
+import java.util.List;
+
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -10,8 +12,6 @@ import me.chanjar.weixin.open.bean.message.WxOpenXmlMessage;
 import me.chanjar.weixin.open.bean.result.WxOpenAuthorizerInfoResult;
 import me.chanjar.weixin.open.bean.result.WxOpenAuthorizerOptionResult;
 import me.chanjar.weixin.open.bean.result.WxOpenQueryAuthResult;
-
-import java.util.List;
 
 /**
  * @author <a href="https://github.com/007gzs">007</a>
@@ -53,6 +53,13 @@ public interface WxOpenComponentService {
    * 获取用户授权页URL（来路URL和成功跳转URL 的域名都需要为三方平台设置的 登录授权的发起页域名）
    */
   String getPreAuthUrl(String redirectURI) throws WxErrorException;
+
+  /**
+   * authType 要授权的帐号类型：1则商户点击链接后，手机端仅展示公众号、2表示仅展示小程序，3表示公众号和小程序都展示。如果为未指定，则默认小程序和公众号都展示。第三方平台开发者可以使用本字段来控制授权的帐号类型。
+   * bizAppid 指定授权唯一的小程序或公众号
+   * 注：auth_type、biz_appid两个字段互斥。
+   */
+  String getPreAuthUrl(String redirectURI, String authType, String bizAppid) throws WxErrorException;
 
   String route(WxOpenXmlMessage wxMessage) throws WxErrorException;
 

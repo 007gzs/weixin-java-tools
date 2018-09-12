@@ -1,13 +1,13 @@
 package cn.binarywang.wx.miniapp.api;
 
+import java.util.List;
+
 import cn.binarywang.wx.miniapp.bean.code.WxMaCategory;
 import cn.binarywang.wx.miniapp.bean.code.WxMaCodeAuditStatus;
 import cn.binarywang.wx.miniapp.bean.code.WxMaCodeCommitRequest;
 import cn.binarywang.wx.miniapp.bean.code.WxMaCodeSubmitAuditRequest;
 import cn.binarywang.wx.miniapp.bean.code.WxMaCodeVersionDistribution;
 import me.chanjar.weixin.common.error.WxErrorException;
-
-import java.util.List;
 
 /**
  * 小程序代码管理相关 API（大部分只能是第三方平台调用）
@@ -44,11 +44,15 @@ public interface WxMaCodeService {
 
   /**
    * 获取体验小程序的体验二维码
+   * 文档地址：
+   * https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1489140610_Uavc4&token=&lang=zh_CN
    *
+   * @param path 指定体验版二维码跳转到某个具体页面（如果不需要的话，则不需要填path参数，可在路径后以“?参数”方式传入参数）
+   * 具体的路径加参数需要urlencode（方法内部处理），比如page/index?action=1编码后得到page%2Findex%3Faction%3D1
    * @return 二维码 bytes
    * @throws WxErrorException 上传失败时抛出，具体错误码请看类注释文档
    */
-  byte[] getQrCode() throws WxErrorException;
+  byte[] getQrCode(String path) throws WxErrorException;
 
   /**
    * 获取授权小程序帐号的可选类目

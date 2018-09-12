@@ -1,11 +1,13 @@
 package me.chanjar.weixin.mp.bean.menu;
 
+import java.io.Serializable;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
-import me.chanjar.weixin.common.util.ToStringUtils;
 import me.chanjar.weixin.common.util.json.WxGsonBuilder;
-
-import java.io.Serializable;
 
 /**
  * <pre>
@@ -30,7 +32,7 @@ public class WxMpGetSelfMenuInfoResult implements Serializable {
 
   @Override
   public String toString() {
-    return ToStringUtils.toSimpleString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 
 }

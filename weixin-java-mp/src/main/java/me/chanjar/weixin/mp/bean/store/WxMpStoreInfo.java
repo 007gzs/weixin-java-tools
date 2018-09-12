@@ -1,11 +1,16 @@
 package me.chanjar.weixin.mp.bean.store;
 
-import com.google.gson.annotations.SerializedName;
-import lombok.Data;
-import me.chanjar.weixin.common.util.ToStringUtils;
-
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import com.google.gson.annotations.SerializedName;
+import lombok.Data;
+
+/**
+ * @author BinaryWang
+ */
 @Data
 public class WxMpStoreInfo implements Serializable{
   private static final long serialVersionUID = 7300598931768355461L;
@@ -15,6 +20,6 @@ public class WxMpStoreInfo implements Serializable{
 
   @Override
   public String toString() {
-    return ToStringUtils.toSimpleString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 }

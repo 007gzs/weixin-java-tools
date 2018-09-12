@@ -1,14 +1,6 @@
 package cn.binarywang.wx.miniapp.api.impl;
 
-import cn.binarywang.wx.miniapp.api.WxMaAnalysisService;
-import cn.binarywang.wx.miniapp.api.WxMaCodeService;
-import cn.binarywang.wx.miniapp.api.WxMaMediaService;
-import cn.binarywang.wx.miniapp.api.WxMaMsgService;
-import cn.binarywang.wx.miniapp.api.WxMaQrcodeService;
-import cn.binarywang.wx.miniapp.api.WxMaService;
-import cn.binarywang.wx.miniapp.api.WxMaSettingService;
-import cn.binarywang.wx.miniapp.api.WxMaTemplateService;
-import cn.binarywang.wx.miniapp.api.WxMaUserService;
+import cn.binarywang.wx.miniapp.api.*;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.config.WxMaConfig;
 import com.google.common.base.Joiner;
@@ -58,6 +50,7 @@ public class WxMaServiceImpl implements WxMaService, RequestHttp<CloseableHttpCl
   private WxMaAnalysisService analysisService = new WxMaAnalysisServiceImpl(this);
   private WxMaCodeService codeService = new WxMaCodeServiceImpl(this);
   private WxMaSettingService settingService = new WxMaSettingServiceImpl(this);
+  private WxMaJsapiService jsapiService = new WxMaJsapiServiceImpl(this);
 
   private int retrySleepMillis = 1000;
   private int maxRetryTimes = 5;
@@ -308,6 +301,11 @@ public class WxMaServiceImpl implements WxMaService, RequestHttp<CloseableHttpCl
   @Override
   public WxMaCodeService getCodeService() {
     return this.codeService;
+  }
+
+  @Override
+  public WxMaJsapiService getJsapiService() {
+    return this.jsapiService;
   }
 
   @Override

@@ -1,5 +1,14 @@
 package com.github.binarywang.wxpay.bean.notify;
 
+import java.io.Serializable;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.github.binarywang.wxpay.bean.result.BaseWxPayResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.thoughtworks.xstream.XStream;
@@ -8,15 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import me.chanjar.weixin.common.util.ToStringUtils;
 import me.chanjar.weixin.common.util.xml.XStreamInitializer;
-import org.apache.commons.codec.binary.Base64;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.Serializable;
-import java.math.BigInteger;
-import java.security.MessageDigest;
 
 /**
  * <pre>
@@ -44,12 +45,10 @@ public class WxPayRefundNotifyResult extends BaseWxPayResult implements Serializ
     WxPayRefundNotifyResult result = BaseWxPayResult.fromXML(xmlString, WxPayRefundNotifyResult.class);
     String reqInfoString = result.getReqInfoString();
     try {
-      Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-
-      final MessageDigest md5 = MessageDigest.getInstance("MD5");
-      md5.update(mchKey.getBytes());
-      final String keyMd5String = new BigInteger(1, md5.digest()).toString(16).toLowerCase();
+      final String keyMd5String = DigestUtils.md5Hex(mchKey).toLowerCase();
       SecretKeySpec key = new SecretKeySpec(keyMd5String.getBytes(), "AES");
+
+      Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
       cipher.init(Cipher.DECRYPT_MODE, key);
       result.setReqInfo(ReqInfo.fromXML(new String(cipher.doFinal(Base64.decodeBase64(reqInfoString)))));
     } catch (Exception e) {
@@ -74,7 +73,7 @@ public class WxPayRefundNotifyResult extends BaseWxPayResult implements Serializ
   private ReqInfo reqInfo;
 
   /**
-   * 加密信息字段解密后的内容
+   * 加密信息字段解密后的内容.
    */
   @Data
   @NoArgsConstructor
@@ -82,12 +81,12 @@ public class WxPayRefundNotifyResult extends BaseWxPayResult implements Serializ
   public static class ReqInfo {
     @Override
     public String toString() {
-      return ToStringUtils.toSimpleString(this);
+      return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
 
     /**
      * <pre>
-     * 字段名：微信订单号
+     * 字段名：微信订单号.
      * 变量名：transaction_id
      * 是否必填：是
      * 类型：String(32)
@@ -100,7 +99,7 @@ public class WxPayRefundNotifyResult extends BaseWxPayResult implements Serializ
 
     /**
      * <pre>
-     * 字段名：商户订单号
+     * 字段名：商户订单号.
      * 变量名：out_trade_no
      * 是否必填：是
      * 类型：String(32)
@@ -113,7 +112,7 @@ public class WxPayRefundNotifyResult extends BaseWxPayResult implements Serializ
 
     /**
      * <pre>
-     * 字段名：微信退款单号
+     * 字段名：微信退款单号.
      * 变量名：refund_id
      * 是否必填：是
      * 类型：String(28)
@@ -126,7 +125,7 @@ public class WxPayRefundNotifyResult extends BaseWxPayResult implements Serializ
 
     /**
      * <pre>
-     * 字段名：商户退款单号
+     * 字段名：商户退款单号.
      * 变量名：out_refund_no
      * 是否必填：是
      * 类型：String(64)
@@ -139,7 +138,7 @@ public class WxPayRefundNotifyResult extends BaseWxPayResult implements Serializ
 
     /**
      * <pre>
-     * 字段名：订单金额
+     * 字段名：订单金额.
      * 变量名：total_fee
      * 是否必填：是
      * 类型：Int
@@ -152,7 +151,7 @@ public class WxPayRefundNotifyResult extends BaseWxPayResult implements Serializ
 
     /**
      * <pre>
-     * 字段名：结订单金额
+     * 字段名：结订单金额.
      * 变量名：settlement_total_fee
      * 是否必填：否
      * 类型：Int
@@ -165,7 +164,7 @@ public class WxPayRefundNotifyResult extends BaseWxPayResult implements Serializ
 
     /**
      * <pre>
-     * 字段名：申请退款金额
+     * 字段名：申请退款金额.
      * 变量名：refund_fee
      * 是否必填：是
      * 类型：Int
@@ -178,7 +177,7 @@ public class WxPayRefundNotifyResult extends BaseWxPayResult implements Serializ
 
     /**
      * <pre>
-     * 字段名：退款金额
+     * 字段名：退款金额.
      * 变量名：settlement_refund_fee
      * 是否必填：是
      * 类型：Int
@@ -191,7 +190,7 @@ public class WxPayRefundNotifyResult extends BaseWxPayResult implements Serializ
 
     /**
      * <pre>
-     * 字段名：退款状态
+     * 字段名：退款状态.
      * 变量名：refund_status
      * 是否必填：是
      * 类型：String(16)
@@ -204,7 +203,7 @@ public class WxPayRefundNotifyResult extends BaseWxPayResult implements Serializ
 
     /**
      * <pre>
-     * 字段名：退款成功时间
+     * 字段名：退款成功时间.
      * 变量名：success_time
      * 是否必填：否
      * 类型： String(20)
@@ -216,7 +215,7 @@ public class WxPayRefundNotifyResult extends BaseWxPayResult implements Serializ
 
     /**
      * <pre>
-     * 字段名：退款入账账户
+     * 字段名：退款入账账户.
      * 变量名：refund_recv_accout
      * 是否必填：是
      * 类型：String(64)
@@ -229,7 +228,7 @@ public class WxPayRefundNotifyResult extends BaseWxPayResult implements Serializ
 
     /**
      * <pre>
-     * 字段名：退款资金来源
+     * 字段名：退款资金来源.
      * 变量名：refund_account
      * 是否必填：是
      * 类型：String(30)
@@ -242,7 +241,7 @@ public class WxPayRefundNotifyResult extends BaseWxPayResult implements Serializ
 
     /**
      * <pre>
-     * 字段名：退款发起来源
+     * 字段名：退款发起来源.
      * 变量名：refund_request_source
      * 是否必填：是
      * 类型：String(30)

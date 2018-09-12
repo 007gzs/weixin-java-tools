@@ -1,12 +1,14 @@
 package cn.binarywang.wx.miniapp.config;
 
-import me.chanjar.weixin.common.bean.WxAccessToken;
-import me.chanjar.weixin.common.util.ToStringUtils;
-import me.chanjar.weixin.common.util.http.apache.ApacheHttpClientBuilder;
-
 import java.io.File;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import me.chanjar.weixin.common.bean.WxAccessToken;
+import me.chanjar.weixin.common.util.http.apache.ApacheHttpClientBuilder;
 
 /**
  * 基于内存的微信配置provider，在实际生产环境中应该将这些配置持久化
@@ -27,7 +29,11 @@ public class WxMaInMemoryConfig implements WxMaConfig {
   protected volatile String httpProxyUsername;
   protected volatile String httpProxyPassword;
 
+  protected volatile String jsapiTicket;
+  protected volatile long jsapiTicketExpiresTime;
+
   protected Lock accessTokenLock = new ReentrantLock();
+  protected Lock jsapiTicketLock = new ReentrantLock();
 
   /**
    * 临时文件目录
@@ -68,6 +74,33 @@ public class WxMaInMemoryConfig implements WxMaConfig {
   public synchronized void updateAccessToken(String accessToken, int expiresInSeconds) {
     this.accessToken = accessToken;
     this.expiresTime = System.currentTimeMillis() + (expiresInSeconds - 200) * 1000L;
+  }
+
+  @Override
+  public String getJsapiTicket() {
+    return this.jsapiTicket;
+  }
+
+  @Override
+  public Lock getJsapiTicketLock() {
+    return this.jsapiTicketLock;
+  }
+
+  @Override
+  public boolean isJsapiTicketExpired() {
+    return System.currentTimeMillis() > this.jsapiTicketExpiresTime;
+  }
+
+  @Override
+  public void expireJsapiTicket() {
+    this.jsapiTicketExpiresTime = 0;
+  }
+
+  @Override
+  public void updateJsapiTicket(String jsapiTicket, int expiresInSeconds) {
+    this.jsapiTicket = jsapiTicket;
+    // 预留200秒的时间
+    this.jsapiTicketExpiresTime = System.currentTimeMillis() + (expiresInSeconds - 200) * 1000L;
   }
 
   @Override
@@ -158,7 +191,7 @@ public class WxMaInMemoryConfig implements WxMaConfig {
 
   @Override
   public String toString() {
-    return ToStringUtils.toSimpleString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 
   @Override

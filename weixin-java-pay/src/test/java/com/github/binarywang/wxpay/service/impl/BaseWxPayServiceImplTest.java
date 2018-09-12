@@ -1,13 +1,44 @@
 package com.github.binarywang.wxpay.service.impl;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Calendar;
+import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.testng.annotations.*;
+
 import com.github.binarywang.utils.qrcode.QrcodeUtils;
-import com.github.binarywang.wxpay.bean.coupon.*;
+import com.github.binarywang.wxpay.bean.coupon.WxPayCouponInfoQueryRequest;
+import com.github.binarywang.wxpay.bean.coupon.WxPayCouponInfoQueryResult;
+import com.github.binarywang.wxpay.bean.coupon.WxPayCouponSendRequest;
+import com.github.binarywang.wxpay.bean.coupon.WxPayCouponSendResult;
+import com.github.binarywang.wxpay.bean.coupon.WxPayCouponStockQueryRequest;
+import com.github.binarywang.wxpay.bean.coupon.WxPayCouponStockQueryResult;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
+import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResultTest;
 import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayNativeOrderResult;
-import com.github.binarywang.wxpay.bean.request.*;
-import com.github.binarywang.wxpay.bean.result.*;
+import com.github.binarywang.wxpay.bean.request.WxPayAuthcode2OpenidRequest;
+import com.github.binarywang.wxpay.bean.request.WxPayMicropayRequest;
+import com.github.binarywang.wxpay.bean.request.WxPayOrderReverseRequest;
+import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
+import com.github.binarywang.wxpay.bean.request.WxPayReportRequest;
+import com.github.binarywang.wxpay.bean.request.WxPaySendRedpackRequest;
+import com.github.binarywang.wxpay.bean.request.WxPayShorturlRequest;
+import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
+import com.github.binarywang.wxpay.bean.result.WxPayBillResult;
+import com.github.binarywang.wxpay.bean.result.WxPayFundFlowResult;
+import com.github.binarywang.wxpay.bean.result.WxPayMicropayResult;
+import com.github.binarywang.wxpay.bean.result.WxPayOrderReverseResult;
+import com.github.binarywang.wxpay.bean.result.WxPayRedpackQueryResult;
+import com.github.binarywang.wxpay.bean.result.WxPayRefundQueryResult;
+import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
+import com.github.binarywang.wxpay.bean.result.WxPaySendRedpackResult;
+import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
+import com.github.binarywang.wxpay.constant.WxPayConstants.AccountType;
 import com.github.binarywang.wxpay.constant.WxPayConstants.BillType;
 import com.github.binarywang.wxpay.constant.WxPayConstants.SignType;
 import com.github.binarywang.wxpay.constant.WxPayConstants.TradeType;
@@ -16,14 +47,6 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.testbase.ApiTestModule;
 import com.github.binarywang.wxpay.testbase.XmlWxPayConfig;
 import com.google.inject.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testng.annotations.*;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Calendar;
-import java.util.Date;
 
 import static com.github.binarywang.wxpay.constant.WxPayConstants.TarType;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -163,6 +186,31 @@ public class BaseWxPayServiceImplTest {
   public void testDownloadBill_withNoParams() throws Exception {
     //必填字段为空时，抛出异常
     this.payService.downloadBill("", "", "", null);
+  }
+
+  @DataProvider
+  public Object[][] fundFlowData() {
+    return new Object[][]{
+      {"20180819", AccountType.BASIC, TarType.GZIP},
+      {"20180819", AccountType.OPERATION, TarType.GZIP},
+      {"20180819", AccountType.FEES, TarType.GZIP},
+      {"20180819", AccountType.BASIC, null},
+      {"20180819", AccountType.OPERATION, null},
+      {"20180819", AccountType.FEES, null}
+    };
+  }
+
+  @Test(dataProvider = "fundFlowData")
+  public void testDownloadFundFlow(String billDate, String accountType, String tarType) throws Exception {
+    WxPayFundFlowResult fundFlowResult = this.payService.downloadFundFlow(billDate, accountType, tarType);
+    assertThat(fundFlowResult).isNotNull();
+    this.logger.info(fundFlowResult.toString());
+  }
+
+  @Test(expectedExceptions = WxPayException.class)
+  public void testDownloadFundFlow_withNoParams() throws Exception {
+    //必填字段为空时，抛出异常
+    this.payService.downloadFundFlow("", "", null);
   }
 
   @Test
@@ -381,13 +429,12 @@ public class BaseWxPayServiceImplTest {
     Date endDate = calendar.getTime();
     calendar.add(Calendar.DAY_OF_MONTH, -88);
     Date beginDate = calendar.getTime();
-    String result = this.payService.queryComment(beginDate, endDate, 0, null);
+    String result = this.payService.queryComment(beginDate, endDate, 0, 1);
     this.logger.info(result);
   }
 
   /**
-   * @see {@link com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResultTest}
-   * @throws Exception
+   * @see WxPayOrderNotifyResultTest#testFromXML()
    */
   @Test
   public void testParseOrderNotifyResult() throws Exception {

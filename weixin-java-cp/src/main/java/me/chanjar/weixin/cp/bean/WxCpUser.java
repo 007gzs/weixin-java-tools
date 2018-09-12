@@ -1,12 +1,12 @@
 package me.chanjar.weixin.cp.bean;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import me.chanjar.weixin.cp.util.json.WxCpGsonBuilder;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import me.chanjar.weixin.cp.util.json.WxCpGsonBuilder;
 
 /**
  * 微信用户信息.
@@ -24,6 +24,7 @@ public class WxCpUser implements Serializable {
   private Gender gender;
   private String email;
   private String avatar;
+  private String avatarMediaId;
   private Integer status;
   private Integer enable;
   private Integer isLeader;

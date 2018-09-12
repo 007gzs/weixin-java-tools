@@ -1,14 +1,16 @@
 package me.chanjar.weixin.mp.bean.message;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamConverter;
-import lombok.Data;
-import me.chanjar.weixin.common.util.ToStringUtils;
-import me.chanjar.weixin.common.util.xml.XStreamCDataConverter;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamConverter;
+import lombok.Data;
+import me.chanjar.weixin.common.util.xml.XStreamCDataConverter;
 
 /**
  * <pre>
@@ -30,7 +32,7 @@ public class SendPicsInfo implements Serializable {
 
   @Override
   public String toString() {
-    return ToStringUtils.toSimpleString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 
   @XStreamAlias("item")
@@ -44,7 +46,7 @@ public class SendPicsInfo implements Serializable {
 
     @Override
     public String toString() {
-      return ToStringUtils.toSimpleString(this);
+      return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
 
   }

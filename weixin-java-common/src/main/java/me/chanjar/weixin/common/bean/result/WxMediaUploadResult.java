@@ -1,11 +1,17 @@
 package me.chanjar.weixin.common.bean.result;
 
-import lombok.Data;
-import me.chanjar.weixin.common.util.ToStringUtils;
-import me.chanjar.weixin.common.util.json.WxGsonBuilder;
-
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import lombok.Data;
+import me.chanjar.weixin.common.util.json.WxGsonBuilder;
+
+/**
+ *
+ * @author Daniel Qian
+ */
 @Data
 public class WxMediaUploadResult implements Serializable {
   private static final long serialVersionUID = 330834334738622341L;
@@ -21,7 +27,7 @@ public class WxMediaUploadResult implements Serializable {
 
   @Override
   public String toString() {
-    return ToStringUtils.toSimpleString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 
 }

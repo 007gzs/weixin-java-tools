@@ -1,9 +1,11 @@
 package me.chanjar.weixin.mp.bean.device;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import me.chanjar.weixin.common.util.ToStringUtils;
 
 /**
  * @author keungtung.
@@ -24,6 +26,6 @@ public class WxDeviceMsg extends AbstractDeviceBean {
 
   @Override
   public String toString() {
-    return ToStringUtils.toSimpleString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 }

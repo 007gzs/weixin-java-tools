@@ -1,12 +1,17 @@
 package me.chanjar.weixin.mp.bean.material;
 
-import lombok.Data;
-import me.chanjar.weixin.common.util.ToStringUtils;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import lombok.Data;
+
+/**
+ * @author codepiano
+ */
 @Data
 public class WxMpMaterialFileBatchGetResult implements Serializable {
   private static final long serialVersionUID = -560388368297267884L;
@@ -17,7 +22,7 @@ public class WxMpMaterialFileBatchGetResult implements Serializable {
 
   @Override
   public String toString() {
-    return ToStringUtils.toSimpleString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 
   @Data
@@ -29,7 +34,7 @@ public class WxMpMaterialFileBatchGetResult implements Serializable {
 
     @Override
     public String toString() {
-      return ToStringUtils.toSimpleString(this);
+      return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
   }
 }

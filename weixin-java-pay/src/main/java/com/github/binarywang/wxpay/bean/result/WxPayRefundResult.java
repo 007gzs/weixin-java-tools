@@ -1,13 +1,13 @@
 package com.github.binarywang.wxpay.bean.result;
 
+import java.io.Serializable;
+import java.util.List;
+
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * <pre>
@@ -101,6 +101,19 @@ public class WxPayRefundResult extends BaseWxPayResult implements Serializable {
   @XStreamAlias("coupon_refund_count")
   private Integer couponRefundCount;
 
+  /**
+   * <pre>
+   * 字段名：代金券退款总金额.
+   * 变量名：coupon_refund_fee
+   * 是否必填：否
+   * 类型：Int
+   * 示例值：100
+   * 描述：代金券退款金额<=退款金额，退款金额-代金券或立减优惠退款金额为现金，说明详见代金券或立减优惠
+   * </pre>
+   */
+  @XStreamAlias("coupon_refund_fee")
+  private Integer couponRefundFee;
+
   private List<WxPayRefundCouponInfo> refundCoupons;
 
   /**
@@ -108,7 +121,13 @@ public class WxPayRefundResult extends BaseWxPayResult implements Serializable {
    */
   public void composeRefundCoupons() {
     List<WxPayRefundCouponInfo> coupons = Lists.newArrayList();
-    for (int i = 0; i < this.getCouponRefundCount(); i++) {
+    Integer refundCount = this.getCouponRefundCount();
+    if (refundCount == null) {
+      //无退款代金券信息
+      return;
+    }
+
+    for (int i = 0; i < refundCount; i++) {
       coupons.add(
         new WxPayRefundCouponInfo(
           this.getXmlValue("xml/coupon_refund_id_" + i),
@@ -117,6 +136,7 @@ public class WxPayRefundResult extends BaseWxPayResult implements Serializable {
         )
       );
     }
+
     this.setRefundCoupons(coupons);
   }
 }

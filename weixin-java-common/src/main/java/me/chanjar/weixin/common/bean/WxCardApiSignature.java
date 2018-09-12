@@ -1,9 +1,11 @@
 package me.chanjar.weixin.common.bean;
 
-import lombok.Data;
-import me.chanjar.weixin.common.util.ToStringUtils;
-
 import java.io.Serializable;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import lombok.Data;
 
 /**
  * 卡券Api签名.
@@ -35,7 +37,6 @@ public class WxCardApiSignature implements Serializable {
 
   @Override
   public String toString() {
-    return ToStringUtils.toSimpleString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
-
 }

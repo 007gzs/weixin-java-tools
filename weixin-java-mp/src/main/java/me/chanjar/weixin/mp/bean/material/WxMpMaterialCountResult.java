@@ -1,10 +1,15 @@
 package me.chanjar.weixin.mp.bean.material;
 
-import lombok.Data;
-import me.chanjar.weixin.common.util.ToStringUtils;
-
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import lombok.Data;
+
+/**
+ * @author codepiano
+ */
 @Data
 public class WxMpMaterialCountResult implements Serializable {
   private static final long serialVersionUID = -5568772662085874138L;
@@ -16,7 +21,7 @@ public class WxMpMaterialCountResult implements Serializable {
 
   @Override
   public String toString() {
-    return ToStringUtils.toSimpleString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 }
 

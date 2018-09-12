@@ -1,10 +1,12 @@
 package me.chanjar.weixin.mp.bean.result;
 
-import lombok.Data;
-import me.chanjar.weixin.common.util.ToStringUtils;
-import me.chanjar.weixin.mp.bean.WxMpCard;
-
 import java.io.Serializable;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import lombok.Data;
+import me.chanjar.weixin.mp.bean.WxMpCard;
 
 /**
  * 卡券查询Code，核销Code接口返回结果
@@ -30,7 +32,7 @@ public class WxMpCardResult implements Serializable {
 
   @Override
   public String toString() {
-    return ToStringUtils.toSimpleString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 
 }

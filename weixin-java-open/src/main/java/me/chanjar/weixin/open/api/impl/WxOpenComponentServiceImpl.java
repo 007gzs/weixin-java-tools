@@ -1,5 +1,13 @@
 package me.chanjar.weixin.open.api.impl;
 
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import com.google.gson.JsonObject;
@@ -24,13 +32,6 @@ import me.chanjar.weixin.open.bean.result.WxOpenAuthorizerInfoResult;
 import me.chanjar.weixin.open.bean.result.WxOpenAuthorizerOptionResult;
 import me.chanjar.weixin.open.bean.result.WxOpenQueryAuthResult;
 import me.chanjar.weixin.open.util.json.WxOpenGsonBuilder;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author <a href="https://github.com/007gzs">007</a>
@@ -148,6 +149,7 @@ public class WxOpenComponentServiceImpl implements WxOpenComponentService {
   private String get(String uri) throws WxErrorException {
     return get(uri, "component_access_token");
   }
+
   private String get(String uri, String accessTokenKey) throws WxErrorException {
     String componentAccessToken = getComponentAccessToken(false);
     String uriWithComponentAccessToken = uri + (uri.contains("?") ? "&" : "?") + accessTokenKey + "=" + componentAccessToken;
@@ -177,13 +179,30 @@ public class WxOpenComponentServiceImpl implements WxOpenComponentService {
 
   @Override
   public String getPreAuthUrl(String redirectURI) throws WxErrorException {
+    return getPreAuthUrl(redirectURI, null, null);
+  }
 
+  @Override
+  public String getPreAuthUrl(String redirectURI, String authType, String bizAppid) throws WxErrorException {
     JsonObject jsonObject = new JsonObject();
     jsonObject.addProperty("component_appid", getWxOpenConfigStorage().getComponentAppId());
     String responseContent = post(API_CREATE_PREAUTHCODE_URL, jsonObject.toString());
     jsonObject = WxGsonBuilder.create().fromJson(responseContent, JsonObject.class);
-    return String.format(COMPONENT_LOGIN_PAGE_URL, getWxOpenConfigStorage().getComponentAppId(), jsonObject.get("pre_auth_code").getAsString(), URIUtil.encodeURIComponent(redirectURI));
+
+    StringBuilder preAuthUrl = new StringBuilder(String.format(COMPONENT_LOGIN_PAGE_URL,
+      getWxOpenConfigStorage().getComponentAppId(),
+      jsonObject.get("pre_auth_code").getAsString(),
+      URIUtil.encodeURIComponent(redirectURI)));
+    if (StringUtils.isNotEmpty(authType)) {
+      preAuthUrl.append("&auth_type=").append(authType);
+    }
+    if (StringUtils.isNotEmpty(bizAppid)) {
+      preAuthUrl.append("&biz_appid=").append(bizAppid);
+    }
+
+    return preAuthUrl.toString();
   }
+
 
   @Override
   public String route(final WxOpenXmlMessage wxMessage) throws WxErrorException {

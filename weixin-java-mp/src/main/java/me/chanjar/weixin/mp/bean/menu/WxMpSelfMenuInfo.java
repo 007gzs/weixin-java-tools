@@ -1,12 +1,14 @@
 package me.chanjar.weixin.mp.bean.menu;
 
-import com.google.gson.annotations.SerializedName;
-import lombok.Data;
-import me.chanjar.weixin.common.util.ToStringUtils;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import com.google.gson.annotations.SerializedName;
+import lombok.Data;
 
 /**
  * <pre>
@@ -27,7 +29,7 @@ public class WxMpSelfMenuInfo implements Serializable {
 
   @Override
   public String toString() {
-    return ToStringUtils.toSimpleString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 
   @Data
@@ -87,7 +89,7 @@ public class WxMpSelfMenuInfo implements Serializable {
 
     @Override
     public String toString() {
-      return ToStringUtils.toSimpleString(this);
+      return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
 
     @Data
@@ -99,7 +101,7 @@ public class WxMpSelfMenuInfo implements Serializable {
 
       @Override
       public String toString() {
-        return ToStringUtils.toSimpleString(this);
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
       }
     }
 
@@ -112,7 +114,7 @@ public class WxMpSelfMenuInfo implements Serializable {
 
       @Override
       public String toString() {
-        return ToStringUtils.toSimpleString(this);
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
       }
 
       @Data
@@ -158,7 +160,7 @@ public class WxMpSelfMenuInfo implements Serializable {
 
         @Override
         public String toString() {
-          return ToStringUtils.toSimpleString(this);
+          return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
         }
 
       }

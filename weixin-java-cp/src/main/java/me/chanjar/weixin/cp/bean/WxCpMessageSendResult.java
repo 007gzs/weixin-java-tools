@@ -1,15 +1,17 @@
 package me.chanjar.weixin.cp.bean;
 
-import com.google.common.base.Splitter;
-import com.google.gson.annotations.SerializedName;
-import lombok.Data;
-import me.chanjar.weixin.common.util.ToStringUtils;
-import me.chanjar.weixin.cp.util.json.WxCpGsonBuilder;
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import com.google.common.base.Splitter;
+import com.google.gson.annotations.SerializedName;
+import lombok.Data;
+import me.chanjar.weixin.cp.util.json.WxCpGsonBuilder;
 
 /**
  * 消息发送结果对象类.
@@ -23,7 +25,7 @@ public class WxCpMessageSendResult implements Serializable {
 
   @Override
   public String toString() {
-    return ToStringUtils.toSimpleString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 
   public static WxCpMessageSendResult fromJson(String json) {

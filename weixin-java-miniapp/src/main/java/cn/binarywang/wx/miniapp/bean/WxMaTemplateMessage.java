@@ -1,11 +1,15 @@
 package cn.binarywang.wx.miniapp.bean;
 
-import cn.binarywang.wx.miniapp.util.json.WxMaGsonBuilder;
-import lombok.*;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.binarywang.wx.miniapp.util.json.WxMaGsonBuilder;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * 模板消息.
@@ -105,6 +109,7 @@ public class WxMaTemplateMessage implements Serializable {
   }
 
   @lombok.Data
+  @NoArgsConstructor
   public static class Data {
     private String name;
     private String value;

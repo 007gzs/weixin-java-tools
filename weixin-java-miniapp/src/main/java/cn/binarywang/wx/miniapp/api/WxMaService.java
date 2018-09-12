@@ -2,6 +2,7 @@ package cn.binarywang.wx.miniapp.api;
 
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.config.WxMaConfig;
+import me.chanjar.weixin.common.bean.WxJsapiSignature;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.common.util.http.MediaUploadRequestExecutor;
 import me.chanjar.weixin.common.util.http.RequestExecutor;
@@ -17,6 +18,7 @@ public interface WxMaService {
   String GET_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
 
   String JSCODE_TO_SESSION_URL = "https://api.weixin.qq.com/sns/jscode2session";
+
   /**
    * 获取登录后的session信息
    *
@@ -148,6 +150,13 @@ public interface WxMaService {
    * @return WxMaCodeService
    */
   WxMaCodeService getCodeService();
+
+  /**
+   * 返回jsapi操作相关的 API服务类对象
+   *
+   * @return WxMaJsapiService
+   */
+  WxMaJsapiService getJsapiService();
 
   /**
    * 小程序修改服务器地址、成员管理 API

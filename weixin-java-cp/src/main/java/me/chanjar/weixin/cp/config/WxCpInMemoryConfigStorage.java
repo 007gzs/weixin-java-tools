@@ -1,10 +1,12 @@
 package me.chanjar.weixin.cp.config;
 
-import me.chanjar.weixin.common.bean.WxAccessToken;
-import me.chanjar.weixin.common.util.ToStringUtils;
-import me.chanjar.weixin.common.util.http.apache.ApacheHttpClientBuilder;
-
 import java.io.File;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import me.chanjar.weixin.common.bean.WxAccessToken;
+import me.chanjar.weixin.common.util.http.apache.ApacheHttpClientBuilder;
 
 /**
  * 基于内存的微信配置provider，在实际生产环境中应该将这些配置持久化
@@ -201,7 +203,7 @@ public class WxCpInMemoryConfigStorage implements WxCpConfigStorage {
 
   @Override
   public String toString() {
-    return ToStringUtils.toSimpleString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 
   @Override

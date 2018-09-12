@@ -6,10 +6,10 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.binarywang</groupId>
   <artifactId>weixin-java-parent</artifactId>
-  <version>3.1.0</version>
+  <version>3.1.8.B</version>
   <packaging>pom</packaging>
   <name>Weixin Java Tools - Parent</name>
-  <description>微信公众号、企业号上级POM</description>
+  <description>微信开发Java SDK</description>
   <url>https://github.com/wechat-group/weixin-java-tools</url>
 
   <licenses>
