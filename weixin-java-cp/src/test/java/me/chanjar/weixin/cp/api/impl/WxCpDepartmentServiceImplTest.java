@@ -31,7 +31,7 @@ public class WxCpDepartmentServiceImplTest {
     cpDepart.setName("子部门" + System.currentTimeMillis());
     cpDepart.setParentId(1L);
     cpDepart.setOrder(1L);
-    Integer departId = this.wxCpService.getDepartmentService().create(cpDepart);
+    Long departId = this.wxCpService.getDepartmentService().create(cpDepart);
     System.out.println(departId);
   }
 

@@ -1,18 +1,6 @@
 package me.chanjar.weixin.mp.api.impl;
 
-import java.util.Arrays;
-import java.util.concurrent.locks.Lock;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import me.chanjar.weixin.common.bean.WxCardApiSignature;
 import me.chanjar.weixin.common.error.WxError;
@@ -22,12 +10,15 @@ import me.chanjar.weixin.common.util.crypto.SHA1;
 import me.chanjar.weixin.common.util.http.SimpleGetRequestExecutor;
 import me.chanjar.weixin.mp.api.WxMpCardService;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.bean.card.WxMpCardLandingPageCreateRequest;
-import me.chanjar.weixin.mp.bean.card.WxMpCardLandingPageCreateResult;
-import me.chanjar.weixin.mp.bean.card.WxMpCardQrcodeCreateResult;
-import me.chanjar.weixin.mp.bean.result.WxMpCardResult;
+import me.chanjar.weixin.mp.bean.card.*;
 import me.chanjar.weixin.mp.enums.TicketType;
 import me.chanjar.weixin.mp.util.json.WxMpGsonBuilder;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.concurrent.locks.Lock;
 
 /**
  * Created by Binary Wang on 2016/7/27.
@@ -150,14 +141,6 @@ public class WxMpCardServiceImpl implements WxMpCardService {
     return jsonPrimitive.getAsString();
   }
 
-  /**
-   * 卡券Code查询.
-   *
-   * @param cardId       卡券ID代表一类卡券
-   * @param code         单张卡券的唯一标准
-   * @param checkConsume 是否校验code核销状态，填入true和false时的code异常状态返回数据不同
-   * @return WxMpCardResult对象
-   */
   @Override
   public WxMpCardResult queryCardCode(String cardId, String code, boolean checkConsume) throws WxErrorException {
     JsonObject param = new JsonObject();
@@ -265,6 +248,13 @@ public class WxMpCardServiceImpl implements WxMpCardService {
     return respone;
   }
 
+  @Override
+  public WxMpCardCreateResult createCard(WxMpCardCreateMessage cardCreateMessage) throws WxErrorException {
+
+    String response = this.wxMpService.post(CARD_CREATE, GSON.toJson(cardCreateMessage));
+    return WxMpCardCreateResult.fromJson(response);
+  }
+
   /**
    * 创建卡券二维码.
    */
@@ -323,5 +313,16 @@ public class WxMpCardServiceImpl implements WxMpCardService {
     jsonRequest.addProperty("code", code);
     jsonRequest.addProperty("reason", reason);
     return this.wxMpService.post(CARD_CODE_UNAVAILABLE, GSON.toJson(jsonRequest));
+  }
+
+  @Override
+  public WxMpCardDeleteResult deleteCard(String cardId) throws WxErrorException {
+    if (StringUtils.isEmpty(cardId)) {
+      throw new WxErrorException(WxError.builder().errorCode(41012).errorMsg("cardId不能为空").build());
+    }
+    JsonObject param = new JsonObject();
+    param.addProperty("card_id", cardId);
+    String response = this.wxMpService.post(CARD_DELETE, param.toString());
+    return WxMpCardDeleteResult.fromJson(response);
   }
 }

@@ -37,7 +37,10 @@ public class WxCryptUtil {
     @Override
     protected DocumentBuilder initialValue() {
       try {
-        return DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setExpandEntityReferences(false);
+        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        return factory.newDocumentBuilder();
       } catch (ParserConfigurationException exc) {
         throw new IllegalArgumentException(exc);
       }

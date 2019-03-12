@@ -17,6 +17,10 @@ public interface WxMaService {
   String GET_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
 
   String JSCODE_TO_SESSION_URL = "https://api.weixin.qq.com/sns/jscode2session";
+  /**
+   * getPaidUnionId
+   */
+  String GET_PAID_UNION_ID_URL = "https://api.weixin.qq.com/wxa/getpaidunionid";
 
   /**
    * 获取登录后的session信息.
@@ -55,6 +59,22 @@ public interface WxMaService {
    * @param forceRefresh 强制刷新
    */
   String getAccessToken(boolean forceRefresh) throws WxErrorException;
+
+  /**
+   * <pre>
+   * 用户支付完成后，获取该用户的 UnionId，无需用户授权。本接口支持第三方平台代理查询。
+   *
+   * 注意：调用前需要用户完成支付，且在支付后的五分钟内有效。
+   * 请求地址： GET https://api.weixin.qq.com/wxa/getpaidunionid?access_token=ACCESS_TOKEN&openid=OPENID
+   * 文档地址：https://developers.weixin.qq.com/miniprogram/dev/api/getPaidUnionId.html
+   * </pre>
+   *
+   * @param openid        必填 支付用户唯一标识
+   * @param transactionId 非必填 微信支付订单号
+   * @param mchId         非必填 微信支付分配的商户号，和商户订单号配合使用
+   * @param outTradeNo    非必填  微信支付商户订单号，和商户号配合使用
+   */
+  String getPaidUnionId(String openid, String transactionId, String mchId, String outTradeNo) throws WxErrorException;
 
   /**
    * 当本Service没有实现某个API的时候，可以用这个，针对所有微信API中的GET请求.
@@ -168,18 +188,21 @@ public interface WxMaService {
 
   /**
    * 返回分享相关查询服务.
+   *
    * @return WxMaShareService
    */
   WxMaShareService getShareService();
 
   /**
    * 返回微信运动相关接口服务对象.
+   *
    * @return WxMaShareService
    */
   WxMaRunService getRunService();
 
   /**
    * 返回内容安全相关接口服务对象.
+   *
    * @return WxMaShareService
    */
   WxMaSecCheckService getSecCheckService();

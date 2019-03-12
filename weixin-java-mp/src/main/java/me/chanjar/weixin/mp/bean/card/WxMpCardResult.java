@@ -1,9 +1,8 @@
-package me.chanjar.weixin.mp.bean.result;
+package me.chanjar.weixin.mp.bean.card;
 
 import java.io.Serializable;
 
 import lombok.Data;
-import me.chanjar.weixin.mp.bean.WxMpCard;
 import me.chanjar.weixin.mp.util.json.WxMpGsonBuilder;
 
 /**
@@ -27,6 +26,12 @@ public class WxMpCardResult implements Serializable {
   private String userCardStatus;
 
   private Boolean canConsume;
+
+  private String outStr;
+
+  private String backgroundPicUrl;
+
+  private String unionid;
 
   @Override
   public String toString() {

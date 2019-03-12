@@ -24,6 +24,7 @@ import me.chanjar.weixin.common.util.http.RequestHttp;
 import me.chanjar.weixin.common.util.http.SimpleGetRequestExecutor;
 import me.chanjar.weixin.common.util.http.SimplePostRequestExecutor;
 import me.chanjar.weixin.cp.api.WxCpAgentService;
+import me.chanjar.weixin.cp.api.WxCpChatService;
 import me.chanjar.weixin.cp.api.WxCpDepartmentService;
 import me.chanjar.weixin.cp.api.WxCpMediaService;
 import me.chanjar.weixin.cp.api.WxCpMenuService;
@@ -35,10 +36,11 @@ import me.chanjar.weixin.cp.bean.WxCpMessage;
 import me.chanjar.weixin.cp.bean.WxCpMessageSendResult;
 import me.chanjar.weixin.cp.config.WxCpConfigStorage;
 
-public abstract class WxCpServiceAbstractImpl<H, P> implements WxCpService, RequestHttp<H, P> {
+public abstract class BaseWxCpServiceImpl<H, P> implements WxCpService, RequestHttp<H, P> {
   protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
   private WxCpUserService userService = new WxCpUserServiceImpl(this);
+  private WxCpChatService chatService = new WxCpChatServiceImpl(this);
   private WxCpDepartmentService departmentService = new WxCpDepartmentServiceImpl(this);
   private WxCpMediaService mediaService = new WxCpMediaServiceImpl(this);
   private WxCpMenuService menuService = new WxCpMenuServiceImpl(this);
@@ -138,9 +140,10 @@ public abstract class WxCpServiceAbstractImpl<H, P> implements WxCpService, Requ
   public WxCpMessageSendResult messageSend(WxCpMessage message) throws WxErrorException {
     String url = "https://qyapi.weixin.qq.com/cgi-bin/message/send";
     Integer agentId = message.getAgentId();
-    if(null == agentId){
+    if (null == agentId) {
       message.setAgentId(this.getWxCpConfigStorage().getAgentId());
     }
+
     return WxCpMessageSendResult.fromJson(this.post(url, message.toJson()));
   }
 
@@ -168,7 +171,7 @@ public abstract class WxCpServiceAbstractImpl<H, P> implements WxCpService, Requ
   }
 
   /**
-   * 向微信端发送请求，在这里执行的策略是当发生access_token过期时才去刷新，然后重新执行请求，而不是全局定时请求
+   * 向微信端发送请求，在这里执行的策略是当发生access_token过期时才去刷新，然后重新执行请求，而不是全局定时请求.
    */
   @Override
   public <T, E> T execute(RequestExecutor<T, E> executor, String uri, E data) throws WxErrorException {
@@ -283,6 +286,11 @@ public abstract class WxCpServiceAbstractImpl<H, P> implements WxCpService, Requ
   }
 
   @Override
+  public WxSessionManager getSessionManager() {
+    return this.sessionManager;
+  }
+
+  @Override
   public String replaceParty(String mediaId) throws WxErrorException {
     String url = "https://qyapi.weixin.qq.com/cgi-bin/batch/replaceparty";
     JsonObject jsonObject = new JsonObject();
@@ -343,7 +351,12 @@ public abstract class WxCpServiceAbstractImpl<H, P> implements WxCpService, Requ
   }
 
   @Override
-  public RequestHttp getRequestHttp() {
+  public WxCpChatService getChatService() {
+    return chatService;
+  }
+
+  @Override
+  public RequestHttp<?, ?> getRequestHttp() {
     return this;
   }
 

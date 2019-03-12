@@ -90,7 +90,7 @@ public class WxPayConstants {
     public static final String APP = "APP";
 
     /**
-     * 公众号支付.
+     * 公众号支付/小程序支付.
      */
     public static final String JSAPI = "JSAPI";
 

@@ -141,6 +141,10 @@ public abstract class BaseWxPayServiceImpl implements WxPayService {
     request.checkAndSign(this.getConfig());
 
     String url = this.getPayBaseUrl() + "/secapi/pay/refund";
+    if (this.getConfig().isUseSandboxEnv()) {
+      url =  PAY_BASE_URL + "/sandboxnew/pay/refund";
+    }
+
     String responseContent = this.post(url, request.toXML(), true);
     WxPayRefundResult result = WxPayRefundResult.fromXML(responseContent);
     result.checkResult(this, request.getSignType(), true);
@@ -326,11 +330,9 @@ public abstract class BaseWxPayServiceImpl implements WxPayService {
 
         Map<String, String> configMap = new HashMap<>(8);
         // 此map用于参与调起sdk支付的二次签名,格式全小写，timestamp只能是10位,格式固定，切勿修改
-        String partnerId;
-        if (StringUtils.isEmpty(request.getMchId())) {
-          partnerId = this.getConfig().getMchId();
-        } else {
-          partnerId = request.getMchId();
+        String partnerId = unifiedOrderResult.getMchId();
+        if (StringUtils.isNotEmpty(unifiedOrderResult.getSubMchId())) {
+          partnerId = unifiedOrderResult.getSubMchId();
         }
 
         configMap.put("prepayid", prepayId);
@@ -342,7 +344,7 @@ public abstract class BaseWxPayServiceImpl implements WxPayService {
         configMap.put("appid", appId);
 
         final WxPayAppOrderResult result = WxPayAppOrderResult.builder()
-          .sign(SignUtils.createSign(configMap, null, this.getConfig().getMchKey(), null))
+          .sign(SignUtils.createSign(configMap, request.getSignType(), this.getConfig().getMchKey(), null))
           .prepayId(prepayId)
           .partnerId(partnerId)
           .appId(appId)
@@ -419,7 +421,7 @@ public abstract class BaseWxPayServiceImpl implements WxPayService {
       configMap.put("noncestr", nonceStr);
       configMap.put("appid", appId);
       // 此map用于客户端与微信服务器交互
-      payInfo.put("sign", SignUtils.createSign(configMap, null, this.getConfig().getMchKey(), null));
+      payInfo.put("sign", SignUtils.createSign(configMap, request.getSignType(), this.getConfig().getMchKey(), null));
       payInfo.put("prepayId", prepayId);
       payInfo.put("partnerId", partnerId);
       payInfo.put("appId", appId);
@@ -432,8 +434,8 @@ public abstract class BaseWxPayServiceImpl implements WxPayService {
       payInfo.put("timeStamp", timestamp);
       payInfo.put("nonceStr", nonceStr);
       payInfo.put("package", "prepay_id=" + prepayId);
-      payInfo.put("signType", SignType.MD5);
-      payInfo.put("paySign", SignUtils.createSign(payInfo, null, this.getConfig().getMchKey(), null));
+      payInfo.put("signType", request.getSignType());
+      payInfo.put("paySign", SignUtils.createSign(payInfo, request.getSignType(), this.getConfig().getMchKey(), null));
     }
 
     return payInfo;
@@ -457,7 +459,7 @@ public abstract class BaseWxPayServiceImpl implements WxPayService {
     params.put("time_stamp", String.valueOf(System.currentTimeMillis() / 1000));
     params.put("nonce_str", String.valueOf(System.currentTimeMillis()));
 
-    String sign = SignUtils.createSign(params, null, this.getConfig().getMchKey(), null);
+    String sign = SignUtils.createSign(params, SignType.MD5, this.getConfig().getMchKey(), null);
     params.put("sign", sign);
 
     for (String key : params.keySet()) {

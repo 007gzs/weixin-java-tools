@@ -11,19 +11,13 @@ import me.chanjar.weixin.mp.util.json.WxMpGsonBuilder;
 
 /**
  * 微信会员卡高级字段信息.
+ *
  * @author yuanqixun
  * date:2018-08-25 00:36
  */
 @Data
 public class AdvancedInfo implements Serializable {
   private static final long serialVersionUID = -8470424140133771841L;
-
-//    public AdvancedInfo(){
-//        useCondition = new UseCondition();
-//        abstractInfo = new Abstract();
-//        textImageList = new ArrayList<>();
-//        timeLimit = new TimeLimit();
-//    }
 
   /**
    * 使用门槛（条件）.
@@ -56,7 +50,7 @@ public class AdvancedInfo implements Serializable {
    * 使用时段限制.
    */
   @SerializedName("time_limit")
-  private TimeLimit timeLimit;
+  private List<TimeLimit> timeLimits;
 
   /**
    * 是否可以分享朋友.
@@ -66,7 +60,7 @@ public class AdvancedInfo implements Serializable {
 
   public void addBusinessService(BusinessServiceType businessServiceType) {
     if (businessServiceType != null) {
-      if (businessServiceList == null){
+      if (businessServiceList == null) {
         businessServiceList = new ArrayList<>();
       }
 

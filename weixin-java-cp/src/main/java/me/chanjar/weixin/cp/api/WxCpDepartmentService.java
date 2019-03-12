@@ -26,7 +26,7 @@ public interface WxCpDepartmentService {
    * @return 部门id
    * @throws WxErrorException 异常
    */
-  Integer create(WxCpDepart depart) throws WxErrorException;
+  Long create(WxCpDepart depart) throws WxErrorException;
 
   /**
    * <pre>

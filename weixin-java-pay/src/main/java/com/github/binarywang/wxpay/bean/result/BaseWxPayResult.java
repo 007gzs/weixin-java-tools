@@ -1,14 +1,12 @@
 package com.github.binarywang.wxpay.bean.result;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
@@ -18,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import com.github.binarywang.wxpay.constant.WxPayConstants;
 import com.github.binarywang.wxpay.exception.WxPayException;
@@ -27,7 +24,6 @@ import com.github.binarywang.wxpay.util.SignUtils;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.gson.GsonBuilder;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Data;
@@ -191,13 +187,14 @@ public abstract class BaseWxPayResult implements Serializable {
     }
 
     try {
-      this.xmlDoc = DocumentBuilderFactory
-        .newInstance()
-        .newDocumentBuilder()
+      final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+      factory.setExpandEntityReferences(false);
+      factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+      this.xmlDoc = factory.newDocumentBuilder()
         .parse(new ByteArrayInputStream(this.xmlString.getBytes(StandardCharsets.UTF_8)));
       return xmlDoc;
-    } catch (SAXException | IOException | ParserConfigurationException e) {
-      throw new RuntimeException("非法的xml文本内容：" + this.xmlString);
+    } catch (Exception e) {
+      throw new RuntimeException("非法的xml文本内容：\n" + this.xmlString, e);
     }
 
   }

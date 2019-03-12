@@ -6,12 +6,12 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.github.binarywang</groupId>
-    <artifactId>weixin-java-parent</artifactId>
-    <version>3.2.8.B</version>
+    <artifactId>wx-java</artifactId>
+    <version>3.3.5.B</version>
   </parent>
 
   <artifactId>weixin-java-common</artifactId>
-  <name>Weixin Java Tools - Common</name>
+  <name>WxJava - Common Java SDK</name>
   <description>微信开发Java SDK公共模块</description>
 
   <dependencies>
@@ -117,7 +117,7 @@
     <dependency>
       <groupId>org.dom4j</groupId>
       <artifactId>dom4j</artifactId>
-      <version>2.0.0</version>
+      <version>2.1.1</version>
     </dependency>
   </dependencies>
 

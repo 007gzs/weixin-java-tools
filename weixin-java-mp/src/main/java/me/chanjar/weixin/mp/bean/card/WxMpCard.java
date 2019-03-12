@@ -1,4 +1,4 @@
-package me.chanjar.weixin.mp.bean;
+package me.chanjar.weixin.mp.bean.card;
 
 
 import java.io.Serializable;
@@ -24,7 +24,11 @@ public class WxMpCard implements Serializable {
 
   private String userCardStatus;
 
-  private Boolean canConsume;
+  private String membershipNumber;
+
+  private String code;
+
+  private Integer bonus;
 
   @Override
   public String toString() {
